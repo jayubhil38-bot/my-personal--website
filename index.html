@@ -3,99 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Hacker Website</title>
+<title>HACKER | My World</title>
 
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:#000;
-  color:#00ff66;
+  margin:0;background:#020604;color:#00ff66;
   font-family:monospace;
-  text-align:center;
 }
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  opacity:.45;
-}
-main{
-  position:relative;
-  z-index:1;
-  padding:25px 15px;
-}
-.card{
-  max-width:420px;
-  margin:25px auto;
-  padding:25px 15px;
-  border:2px solid #00ff66;
-  border-radius:15px;
-  background:rgba(0,0,0,.85);
-  box-shadow:0 0 20px #00ff66;
-  animation:glow 2s infinite alternate;
-}
-h1{
+header{
+  padding:20px;text-align:center;
+  border-bottom:1px solid #00ff66;
   text-shadow:0 0 12px #00ff66;
 }
+nav{
+  display:flex;justify-content:space-around;
+  flex-wrap:wrap;gap:8px;padding:12px;
+  background:#06140a;position:sticky;top:0;
+}
+nav a{color:#00ff66;text-decoration:none;padding:8px}
+section{
+  margin:18px auto;padding:20px;
+  width:92%;max-width:600px;
+  border:1px solid #00ff66;border-radius:14px;
+  background:#06100a;
+  box-shadow:0 0 12px #003d19;
+}
+h2{text-shadow:0 0 8px #00ff66}
 input,button{
-  width:90%;
-  padding:12px;
-  margin:8px;
-  border:1px solid #00ff66;
-  border-radius:6px;
-  background:#000;
-  color:#00ff66;
-  font-size:16px;
+  width:100%;padding:12px;margin:8px 0;
+  background:#000;color:#00ff66;
+  border:1px solid #00ff66;border-radius:7px;
+  font-family:monospace;font-size:16px;
 }
-button{
-  background:#00ff66;
-  color:#000;
-  font-weight:bold;
+button{background:#00ff66;color:#000;font-weight:bold}
+#terminal{
+  min-height:120px;white-space:pre-wrap;
+  overflow-wrap:anywhere;line-height:1.6;
 }
-#clock{
-  font-size:24px;
-  margin:20px;
-}
-#message{
-  overflow-wrap:anywhere;
-}
-@keyframes glow{
-  from{box-shadow:0 0 8px #00ff66}
-  to{box-shadow:0 0 25px #00ff66}
-}
+footer{text-align:center;padding:25px}
 </style>
 </head>
 
 <body>
-<canvas id="matrix"></canvas>
+<header>
+  <h1>⚡ HACKER ⚡</h1>
+  <p>WELCOME TO MY DIGITAL WORLD</p>
+  <div id="clock"></div>
+</header>
 
-<main>
-  <h1>WELCOME TO MY WORLD</h1>
-  <p>⚡ MATRIX • NEON • TECHNOLOGY ⚡</p>
+<nav>
+  <a href="#profile">Profile</a>
+  <a href="#terminalBox">Terminal</a>
+  <a href="#login">Login</a>
+</nav>
 
-  <div id="clock">00:00:00</div>
+<section id="profile">
+  <h2>👤 MY PROFILE</h2>
+  <p>Name: HACKER</p>
+  <p>Status: Learning Technology</p>
+  <p>Mode: Cyber Interface</p>
+</section>
 
-  <section class="card">
-    <h1>👤 My Profile</h1>
-    <p>Name: My Name</p>
-    <p>Welcome to my personal website!</p>
-  </section>
+<section id="terminalBox">
+  <h2>🖥️ HACKER TERMINAL</h2>
+  <div id="terminal">Welcome to HACKER Terminal!
+Type help to see available commands.</div>
+  <input id="command" placeholder="Type a command">
+  <button onclick="runCommand()">Run Command</button>
+</section>
 
-  <section class="card">
-    <h1>🔐 Demo Login</h1>
-    <p>This is a demonstration only.</p>
+<section id="login">
+  <h2>🔐 DEMO LOGIN</h2>
+  <p>This is a demo only. Do not enter a password.</p>
+  <input id="username" placeholder="Enter a display name">
+  <button onclick="demoLogin()">Login Demo</button>
+  <p id="message"></p>
+</section>
 
-    <input id="username" type="text"
-      placeholder="Enter any username">
-
-    <button onclick="login()">Login</button>
-
-    <p id="message"></p>
-  </section>
-
-  <p>🟢 Keep Learning • Keep Creating 🟢</p>
-</main>
+<footer>🟢 KEEP LEARNING • KEEP CREATING 🟢</footer>
 
 <script>
 function updateClock(){
@@ -105,41 +91,35 @@ function updateClock(){
 updateClock();
 setInterval(updateClock,1000);
 
-function login(){
-  const name=document.getElementById("username").value.trim();
-  document.getElementById("message").textContent =
-    name ? "Welcome, "+name+"! Demo login successful." :
-    "Please enter a username.";
-}
+function runCommand(){
+  const box=document.getElementById("terminal");
+  const input=document.getElementById("command");
+  const cmd=input.value.trim().toLowerCase();
+  let result="Command not found. Type help.";
 
-const canvas=document.getElementById("matrix");
-const ctx=canvas.getContext("2d");
-const chars="01アイウエオカキクケコABCDEF";
-let drops=[];
-
-function resize(){
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-  drops=Array(Math.ceil(canvas.width/16)).fill(1);
-}
-function drawMatrix(){
-  ctx.fillStyle="rgba(0,0,0,0.08)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="#00ff66";
-  ctx.font="16px monospace";
-
-  for(let i=0;i<drops.length;i++){
-    const char=chars[Math.floor(Math.random()*chars.length)];
-    ctx.fillText(char,i*16,drops[i]*16);
-    if(drops[i]*16>canvas.height&&Math.random()>0.975){
-      drops[i]=0;
-    }
-    drops[i]++;
+  if(cmd==="help"){
+    result="Commands:\nhelp - Show commands\nabout - About this website\n date - Show current date\nclear - Clear terminal";
+  }else if(cmd==="about"){
+    result="HACKER is a personal learning website.";
+  }else if(cmd==="date"){
+    result=new Date().toLocaleDateString("en-IN");
+  }else if(cmd==="clear"){
+    box.textContent="";
+    input.value="";
+    return;
+  }else if(cmd===""){
+    result="Please type a command.";
   }
+
+  box.textContent+="\n> "+input.value+"\n"+result;
+  input.value="";
 }
-window.addEventListener("resize",resize);
-resize();
-setInterval(drawMatrix,50);
+
+function demoLogin(){
+  const name=document.getElementById("username").value.trim();
+  document.getElementById("message").textContent=
+    name ? "Welcome, "+name+"! Demo only." : "Enter a display name.";
+}
 </script>
 </body>
 </html>
