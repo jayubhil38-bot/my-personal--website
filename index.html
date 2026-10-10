@@ -2,124 +2,148 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HACKER | My World</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HACKER ULTIMATE</title>
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;background:#020604;color:#00ff66;
-  font-family:monospace;
+ margin:0;background:#010503;color:#00ff66;
+ font-family:monospace;
 }
-header{
-  padding:20px;text-align:center;
-  border-bottom:1px solid #00ff66;
-  text-shadow:0 0 12px #00ff66;
+canvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+header{text-align:center;padding:20px 10px}
+h1{color:#00ff66;text-shadow:0 0 15px #00ff66}
+#clock{font-size:24px;margin:15px}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+nav a{color:#00ff66;padding:10px;text-decoration:none}
+.card{
+ width:92%;max-width:600px;margin:18px auto;padding:18px;
+ background:rgba(0,15,6,.94);border:1px solid #00ff66;
+ border-radius:12px;box-shadow:0 0 12px #004d20;
+ animation:glow 2s infinite alternate;
 }
-nav{
-  display:flex;justify-content:space-around;
-  flex-wrap:wrap;gap:8px;padding:12px;
-  background:#06140a;position:sticky;top:0;
-}
-nav a{color:#00ff66;text-decoration:none;padding:8px}
-section{
-  margin:18px auto;padding:20px;
-  width:92%;max-width:600px;
-  border:1px solid #00ff66;border-radius:14px;
-  background:#06100a;
-  box-shadow:0 0 12px #003d19;
-}
-h2{text-shadow:0 0 8px #00ff66}
 input,button{
-  width:100%;padding:12px;margin:8px 0;
-  background:#000;color:#00ff66;
-  border:1px solid #00ff66;border-radius:7px;
-  font-family:monospace;font-size:16px;
+ width:100%;padding:12px;margin:7px 0;
+ background:#000;color:#00ff66;border:1px solid #00ff66;
+ border-radius:6px;font:inherit;
 }
 button{background:#00ff66;color:#000;font-weight:bold}
-#terminal{
-  min-height:120px;white-space:pre-wrap;
-  overflow-wrap:anywhere;line-height:1.6;
-}
-footer{text-align:center;padding:25px}
+#terminal,#chat{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
+footer{text-align:center;padding:20px}
+@keyframes glow{from{box-shadow:0 0 5px #006622}to{box-shadow:0 0 18px #00ff66}}
 </style>
 </head>
-
 <body>
+<canvas id="matrix"></canvas>
+
 <header>
-  <h1>⚡ HACKER ⚡</h1>
-  <p>WELCOME TO MY DIGITAL WORLD</p>
-  <div id="clock"></div>
+<h1>⚡ HACKER ⚡</h1>
+<p>ULTIMATE DIGITAL DASHBOARD</p>
+<div id="clock"></div>
 </header>
 
 <nav>
-  <a href="#profile">Profile</a>
-  <a href="#terminalBox">Terminal</a>
-  <a href="#login">Login</a>
+<a href="#profile">Profile</a>
+<a href="#terminal">Terminal</a>
+<a href="#ai">AI Chat</a>
+<a href="#login">Login</a>
 </nav>
 
-<section id="profile">
-  <h2>👤 MY PROFILE</h2>
-  <p>Name: HACKER</p>
-  <p>Status: Learning Technology</p>
-  <p>Mode: Cyber Interface</p>
+<section class="card" id="profile">
+<h2>👤 MY PROFILE</h2>
+<p>Name: HACKER</p>
+<p>Status: Learning Technology</p>
+<p>Mode: Neon Cyber</p>
 </section>
 
-<section id="terminalBox">
-  <h2>🖥️ HACKER TERMINAL</h2>
-  <div id="terminal">Welcome to HACKER Terminal!
-Type help to see available commands.</div>
-  <input id="command" placeholder="Type a command">
-  <button onclick="runCommand()">Run Command</button>
+<section class="card" id="terminal">
+<h2>🖥️ HACKER TERMINAL</h2>
+<div id="terminalOutput">Welcome to HACKER Terminal!
+Type help to see commands.</div>
+<input id="cmd" placeholder="Type help, about, date, clear">
+<button onclick="runCmd()">Run Command</button>
 </section>
 
-<section id="login">
-  <h2>🔐 DEMO LOGIN</h2>
-  <p>This is a demo only. Do not enter a password.</p>
-  <input id="username" placeholder="Enter a display name">
-  <button onclick="demoLogin()">Login Demo</button>
-  <p id="message"></p>
+<section class="card" id="ai">
+<h2>🤖 AI CHATBOT DEMO</h2>
+<p>This is a simple demo, not a real AI service.</p>
+<div id="chat">Bot: Hello! Type hello, help, or about.</div>
+<input id="chatInput" placeholder="Write a message">
+<button onclick="chatBot()">Send Message</button>
 </section>
 
-<footer>🟢 KEEP LEARNING • KEEP CREATING 🟢</footer>
+<section class="card" id="login">
+<h2>🔐 LOGIN DEMO</h2>
+<p>Demo only. Do not enter passwords.</p>
+<input id="user" placeholder="Enter a display name">
+<button onclick="demoLogin()">Login Demo</button>
+<p id="loginMessage"></p>
+</section>
+
+<footer>🟢 LEARN • BUILD • CREATE 🟢</footer>
 
 <script>
-function updateClock(){
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("en-IN");
+function clock(){
+ document.getElementById("clock").textContent=
+ new Date().toLocaleTimeString("en-IN");
 }
-updateClock();
-setInterval(updateClock,1000);
+clock();setInterval(clock,1000);
 
-function runCommand(){
-  const box=document.getElementById("terminal");
-  const input=document.getElementById("command");
-  const cmd=input.value.trim().toLowerCase();
-  let result="Command not found. Type help.";
+function runCmd(){
+ let input=document.getElementById("cmd");
+ let output=document.getElementById("terminalOutput");
+ let c=input.value.trim().toLowerCase();
+ let answer={
+  help:"Commands: help, about, date, clear",
+  about:"HACKER is a personal learning website.",
+  date:new Date().toLocaleDateString("en-IN")
+ };
+ if(c==="clear"){output.textContent="Terminal cleared.";input.value="";return}
+ output.textContent+="\n> "+c+"\n"+(answer[c]||"Unknown command. Type help.");
+ input.value="";
+}
 
-  if(cmd==="help"){
-    result="Commands:\nhelp - Show commands\nabout - About this website\n date - Show current date\nclear - Clear terminal";
-  }else if(cmd==="about"){
-    result="HACKER is a personal learning website.";
-  }else if(cmd==="date"){
-    result=new Date().toLocaleDateString("en-IN");
-  }else if(cmd==="clear"){
-    box.textContent="";
-    input.value="";
-    return;
-  }else if(cmd===""){
-    result="Please type a command.";
-  }
-
-  box.textContent+="\n> "+input.value+"\n"+result;
-  input.value="";
+function chatBot(){
+ let input=document.getElementById("chatInput");
+ let msg=input.value.trim();
+ let reply="I am a demo bot. Try hello, help, or about.";
+ if(!msg)return;
+ if(/hello|hi|namaste/i.test(msg))reply="Hello! Welcome to HACKER website.";
+ else if(/help/i.test(msg))reply="I can answer simple demo messages.";
+ else if(/about/i.test(msg))reply="This is your HACKER dashboard.";
+ document.getElementById("chat").textContent=
+ "You: "+msg+"\nBot: "+reply;
+ input.value="";
 }
 
 function demoLogin(){
-  const name=document.getElementById("username").value.trim();
-  document.getElementById("message").textContent=
-    name ? "Welcome, "+name+"! Demo only." : "Enter a display name.";
+ let name=document.getElementById("user").value.trim();
+ document.getElementById("loginMessage").textContent=
+ name?"Welcome, "+name+"! Demo login only.":"Enter a display name.";
 }
+
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+const chars="01アイウエオカキクケコABCDEF";
+let drops=[];
+function resize(){
+ canvas.width=window.innerWidth;
+ canvas.height=window.innerHeight;
+ drops=Array(Math.ceil(canvas.width/16)).fill(1);
+}
+function draw(){
+ ctx.fillStyle="rgba(0,0,0,0.12)";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="#00ff66";
+ ctx.font="16px monospace";
+ for(let i=0;i<drops.length;i++){
+  ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*16,drops[i]*16);
+  if(drops[i]*16>canvas.height&&Math.random()>.975)drops[i]=0;
+  drops[i]++;
+ }
+}
+window.addEventListener("resize",resize);
+resize();setInterval(draw,50);
 </script>
 </body>
 </html>
