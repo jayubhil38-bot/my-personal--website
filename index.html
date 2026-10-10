@@ -2,52 +2,68 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Hacker Website</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hacker Login</title>
 <style>
 body {
-  background: #050505;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #020805;
   color: #00ff66;
   font-family: monospace;
-  text-align: center;
-  padding: 20px;
 }
-.box {
-  border: 2px solid #00ff66;
-  padding: 20px;
-  margin-top: 40px;
+.login-box {
+  width: 80%;
+  max-width: 320px;
+  padding: 25px;
+  border: 1px solid #00ff66;
   border-radius: 12px;
-  box-shadow: 0 0 15px #00ff66;
+  box-shadow: 0 0 20px #00ff6655;
+  text-align: center;
 }
-h1 {
-  text-shadow: 0 0 10px #00ff66;
+input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background: #07130b;
+  color: #00ff66;
+  border: 1px solid #00ff66;
+  border-radius: 5px;
 }
 button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
   background: #00ff66;
-  color: black;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 6px;
+  color: #001a08;
+  border: 0;
+  border-radius: 5px;
   font-weight: bold;
 }
 </style>
 </head>
-
 <body>
-<div class="box">
-<h1>WELCOME, HACKER! 💻</h1>
-<p>नमस्ते! 👋 मेरी वेबसाइट में आपका स्वागत है।</p>
-<p id="status">SYSTEM STATUS: ONLINE 🟢</p>
-<button onclick="showMessage()">CLICK ME</button>
-<p id="message"></p>
+<div class="login-box">
+  <h1>LOGIN 🔐</h1>
+  <p>WELCOME, HACKER</p>
+  <form id="loginForm">
+    <input type="text" placeholder="Username" required>
+    <input type="password" placeholder="Password" required>
+    <button type="submit">LOGIN</button>
+  </form>
+  <p id="message"></p>
+  <small>DEMO LOGIN PAGE</small>
 </div>
-
 <script>
-function showMessage() {
-  document.getElementById("message").innerText =
-  "Hello Hacker! Website successfully working! 🚀";
-}
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  document.getElementById("message").textContent =
+    "Demo only! Login is not connected.";
+});
 </script>
 </body>
 </html>
