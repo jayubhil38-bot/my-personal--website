@@ -2,68 +2,144 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hacker Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Hacker Website</title>
+
 <style>
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #020805;
-  color: #00ff66;
-  font-family: monospace;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#000;
+  color:#00ff66;
+  font-family:monospace;
+  text-align:center;
 }
-.login-box {
-  width: 80%;
-  max-width: 320px;
-  padding: 25px;
-  border: 1px solid #00ff66;
-  border-radius: 12px;
-  box-shadow: 0 0 20px #00ff6655;
-  text-align: center;
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  opacity:.45;
 }
-input {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  background: #07130b;
-  color: #00ff66;
-  border: 1px solid #00ff66;
-  border-radius: 5px;
+main{
+  position:relative;
+  z-index:1;
+  padding:25px 15px;
 }
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 12px;
-  background: #00ff66;
-  color: #001a08;
-  border: 0;
-  border-radius: 5px;
-  font-weight: bold;
+.card{
+  max-width:420px;
+  margin:25px auto;
+  padding:25px 15px;
+  border:2px solid #00ff66;
+  border-radius:15px;
+  background:rgba(0,0,0,.85);
+  box-shadow:0 0 20px #00ff66;
+  animation:glow 2s infinite alternate;
+}
+h1{
+  text-shadow:0 0 12px #00ff66;
+}
+input,button{
+  width:90%;
+  padding:12px;
+  margin:8px;
+  border:1px solid #00ff66;
+  border-radius:6px;
+  background:#000;
+  color:#00ff66;
+  font-size:16px;
+}
+button{
+  background:#00ff66;
+  color:#000;
+  font-weight:bold;
+}
+#clock{
+  font-size:24px;
+  margin:20px;
+}
+#message{
+  overflow-wrap:anywhere;
+}
+@keyframes glow{
+  from{box-shadow:0 0 8px #00ff66}
+  to{box-shadow:0 0 25px #00ff66}
 }
 </style>
 </head>
+
 <body>
-<div class="login-box">
-  <h1>LOGIN 🔐</h1>
-  <p>WELCOME, HACKER</p>
-  <form id="loginForm">
-    <input type="text" placeholder="Username" required>
-    <input type="password" placeholder="Password" required>
-    <button type="submit">LOGIN</button>
-  </form>
-  <p id="message"></p>
-  <small>DEMO LOGIN PAGE</small>
-</div>
+<canvas id="matrix"></canvas>
+
+<main>
+  <h1>WELCOME TO MY WORLD</h1>
+  <p>⚡ MATRIX • NEON • TECHNOLOGY ⚡</p>
+
+  <div id="clock">00:00:00</div>
+
+  <section class="card">
+    <h1>👤 My Profile</h1>
+    <p>Name: My Name</p>
+    <p>Welcome to my personal website!</p>
+  </section>
+
+  <section class="card">
+    <h1>🔐 Demo Login</h1>
+    <p>This is a demonstration only.</p>
+
+    <input id="username" type="text"
+      placeholder="Enter any username">
+
+    <button onclick="login()">Login</button>
+
+    <p id="message"></p>
+  </section>
+
+  <p>🟢 Keep Learning • Keep Creating 🟢</p>
+</main>
+
 <script>
-document.getElementById("loginForm").addEventListener("submit", function(event) {
-  event.preventDefault();
+function updateClock(){
+  document.getElementById("clock").textContent =
+    new Date().toLocaleTimeString("en-IN");
+}
+updateClock();
+setInterval(updateClock,1000);
+
+function login(){
+  const name=document.getElementById("username").value.trim();
   document.getElementById("message").textContent =
-    "Demo only! Login is not connected.";
-});
+    name ? "Welcome, "+name+"! Demo login successful." :
+    "Please enter a username.";
+}
+
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+const chars="01アイウエオカキクケコABCDEF";
+let drops=[];
+
+function resize(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  drops=Array(Math.ceil(canvas.width/16)).fill(1);
+}
+function drawMatrix(){
+  ctx.fillStyle="rgba(0,0,0,0.08)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#00ff66";
+  ctx.font="16px monospace";
+
+  for(let i=0;i<drops.length;i++){
+    const char=chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillText(char,i*16,drops[i]*16);
+    if(drops[i]*16>canvas.height&&Math.random()>0.975){
+      drops[i]=0;
+    }
+    drops[i]++;
+  }
+}
+window.addEventListener("resize",resize);
+resize();
+setInterval(drawMatrix,50);
 </script>
 </body>
 </html>
